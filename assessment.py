@@ -31,11 +31,11 @@ def count_words(phrase):
 
     word_count = {}
 
-    for word in phrase:
-        if word in phrase:
-            phrase[word] += 1
+    for word in phrase.split():
+        if word in word_count:
+            word_count[word] += 1
         else:
-            phrase[word] = 1
+            word_count[word] = 1
 
     return word_count
 
@@ -62,7 +62,16 @@ def get_melon_price(melon_name):
         'No price found'
     """
 
-    return 0
+    melon_prices = {"Watermelon": 2.95,
+                   "Cantaloupe": 2.50,
+                   "Musk": 3.25,
+                   "Christmas": 14.25,
+                }
+
+    if melon_name in melon_prices:
+        return melon_prices[melon_name]
+    else:
+        return "No price found"
 
 
 def word_length_sorted(words):
@@ -84,7 +93,23 @@ def word_length_sorted(words):
         [(2, ['ok']), (9, ['porcupine'])]
     """
 
-    return []
+    # COME BACK TO THIS 
+
+    length_tally = {}
+
+    for word in words:
+        if len(word) not in length_tally.keys():
+            length_tally[len(word)] = [word]
+        else:
+            length_tally[len(word)].append(word)
+            length_tally[len(word)].sort()
+
+    list_of_lengths = []
+
+    for key, value in length_tally.iteritems():
+        list_of_lengths.append((key, value))
+
+    return sorted(list_of_lengths)
 
 
 def translate_to_pirate_talk(phrase):
@@ -126,7 +151,36 @@ def translate_to_pirate_talk(phrase):
         'me swabbie be not a man!'
     """
 
-    return ""
+
+    pirate_dictionary = {"sir": "matey",
+                         "hotel": "fleabag inn",
+                         "student": "swabbie",
+                         "man": "matey",
+                         "professor": "foul braggart",
+                         "restaurant": "galley",
+                         "your": "yer",
+                         "excuse": "arr",
+                         "students": "swabbies",
+                         "are": "be",
+                         "restroom": "head",
+                         "my": "me",
+                         "is": "be"
+                        }
+
+    pirate_sentence = []
+
+    word_list = phrase.split()
+
+    for word in word_list:
+        if word in pirate_dictionary.keys():
+            pirate_sentence.append(pirate_dictionary[word])
+        else:
+            pirate_sentence.append(word)
+
+    pirate_sentence = " ".join(pirate_sentence)
+
+
+    return pirate_sentence
 
 
 def kids_game(names):
@@ -175,7 +229,84 @@ def kids_game(names):
     good solutions here will definitely require a dictionary.
     """
 
-    return []
+
+    first_letter_index = {}
+    word_chain = [names.pop(0)]
+
+    # Creates dictionary
+
+    for name in names:
+        if name[0] in first_letter_index:
+            first_letter_index[name[0]].append(name)
+        else:
+            first_letter_index[name[0]] = [name]
+
+   # Function finds last letter of last word passed in
+
+    def last_letter(list_of_words):
+        return list_of_words[-1][-1]
+
+    # Adds the next available word in list until there are no words left
+
+    while True:
+        letter = last_letter(word_chain)
+        if letter in first_letter_index:
+            if len(first_letter_index[letter]) > 0:
+                next_word = first_letter_index[letter].pop(0)
+                word_chain.append(next_word)
+            else:
+                break
+        else:
+            break
+
+    return word_chain
+
+
+    ## This solution didn't work - but I'd like to go over it with my advisor
+    ## To see if it could have worked 
+
+    # first_letter_index = {}
+
+    # # Creates dictionary
+    # for name in names:
+    #     if name[0] not in first_letter_index:
+    #         first_letter_index[name[0]] = [name]
+    #     else:
+    #         first_letter_index[name[0]].append(name)
+
+    
+    # word_chain = [names[0]]
+
+
+
+    # for name in names[1:]:
+    #     if name[0] == word_chain[-1][-1]:
+    #         word_chain.append(name)
+    #     # If the last letter in the chain is in the dictionary
+    #     elif word_chain[-1][-1] in first_letter_index:
+            
+    #         # Assigns variable to last used letter
+    #         last_letter = word_chain[-1][-1]
+            
+    #         # Next word is the first word in the list of words assocaited 
+    #         # With that letter 
+    #         next_word = first_letter_index[last_letter][0]
+            
+    #         # Append that word onto the word chain
+    #         word_chain.append(next_word)
+            
+    #         #removes last work from dict
+    #         # Problem is happening here - out of range
+    #         first_letter_index[last_letter].remove(next_word)
+
+
+    #         #If the next word is an empty list, break??
+    #         # Problem is happening here
+    #         if next_word == []:
+    #             break
+
+    # return word_chain
+
 
 #####################################################################
 # You can ignore everything below this.
